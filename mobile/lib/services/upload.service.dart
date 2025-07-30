@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:immich_mobile/constants/constants.dart';
 import 'package:immich_mobile/domain/models/asset/base_asset.model.dart';
+import 'package:immich_mobile/domain/models/asset/metadata.model.dart';
 import 'package:immich_mobile/domain/models/store.model.dart';
 import 'package:immich_mobile/entities/store.entity.dart';
 import 'package:immich_mobile/infrastructure/repositories/backup.repository.dart';
@@ -289,6 +290,7 @@ class UploadService {
       priority: priority,
       isFavorite: asset.isFavorite,
       requiresWiFi: requiresWiFi,
+      cloudId: asset.cloudId,
     );
   }
 
@@ -316,6 +318,7 @@ class UploadService {
       priority: 0, // Highest priority to get upload immediately
       isFavorite: asset.isFavorite,
       requiresWiFi: requiresWiFi,
+      cloudId: asset.cloudId,
     );
   }
 
@@ -340,6 +343,7 @@ class UploadService {
     String? metadata,
     int? priority,
     bool? isFavorite,
+    String? cloudId,
     bool requiresWiFi = true,
   }) async {
     final serverEndpoint = Store.get(StoreKey.serverEndpoint);
@@ -358,6 +362,7 @@ class UploadService {
       'fileModifiedAt': fileModifiedAt.toUtc().toIso8601String(),
       'isFavorite': isFavorite?.toString() ?? 'false',
       'duration': '0',
+      'metadata': AssetMetadata(cloudId: cloudId).toJson(),
       if (fields != null) ...fields,
     };
 
