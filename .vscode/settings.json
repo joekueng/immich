@@ -60,6 +60,5 @@
     "package.json": "package-lock.json, yarn.lock, pnpm-lock.yaml, bun.lockb, bun.lock, pnpm-workspace.yaml, .pnpmfile.cjs"
   },
   "svelte.enable-ts-plugin": true,
-  "typescript.preferences.importModuleSpecifier": "non-relative",
-  "postman.settings.dotenv-detection-notification-visibility": false
+  "typescript.preferences.importModuleSpecifier": "non-relative"
 }
