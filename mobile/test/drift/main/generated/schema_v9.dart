@@ -2941,6 +2941,225 @@ class PartnerEntityCompanion extends UpdateCompanion<PartnerEntityData> {
   }
 }
 
+class RemoteAssetMetadataEntity extends Table
+    with TableInfo<RemoteAssetMetadataEntity, RemoteAssetMetadataEntityData> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  RemoteAssetMetadataEntity(this.attachedDatabase, [this._alias]);
+  late final GeneratedColumn<String> assetId = GeneratedColumn<String>(
+    'asset_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'REFERENCES remote_asset_entity (id) ON DELETE CASCADE',
+    ),
+  );
+  late final GeneratedColumn<String> key = GeneratedColumn<String>(
+    'key',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  late final GeneratedColumn<Uint8List> value = GeneratedColumn<Uint8List>(
+    'value',
+    aliasedName,
+    false,
+    type: DriftSqlType.blob,
+    requiredDuringInsert: true,
+  );
+  @override
+  List<GeneratedColumn> get $columns => [assetId, key, value];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'remote_asset_metadata_entity';
+  @override
+  Set<GeneratedColumn> get $primaryKey => {assetId, key};
+  @override
+  RemoteAssetMetadataEntityData map(
+    Map<String, dynamic> data, {
+    String? tablePrefix,
+  }) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return RemoteAssetMetadataEntityData(
+      assetId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}asset_id'],
+      )!,
+      key: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}key'],
+      )!,
+      value: attachedDatabase.typeMapping.read(
+        DriftSqlType.blob,
+        data['${effectivePrefix}value'],
+      )!,
+    );
+  }
+
+  @override
+  RemoteAssetMetadataEntity createAlias(String alias) {
+    return RemoteAssetMetadataEntity(attachedDatabase, alias);
+  }
+
+  @override
+  bool get withoutRowId => true;
+  @override
+  bool get isStrict => true;
+}
+
+class RemoteAssetMetadataEntityData extends DataClass
+    implements Insertable<RemoteAssetMetadataEntityData> {
+  final String assetId;
+  final String key;
+  final Uint8List value;
+  const RemoteAssetMetadataEntityData({
+    required this.assetId,
+    required this.key,
+    required this.value,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['asset_id'] = Variable<String>(assetId);
+    map['key'] = Variable<String>(key);
+    map['value'] = Variable<Uint8List>(value);
+    return map;
+  }
+
+  factory RemoteAssetMetadataEntityData.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return RemoteAssetMetadataEntityData(
+      assetId: serializer.fromJson<String>(json['assetId']),
+      key: serializer.fromJson<String>(json['key']),
+      value: serializer.fromJson<Uint8List>(json['value']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'assetId': serializer.toJson<String>(assetId),
+      'key': serializer.toJson<String>(key),
+      'value': serializer.toJson<Uint8List>(value),
+    };
+  }
+
+  RemoteAssetMetadataEntityData copyWith({
+    String? assetId,
+    String? key,
+    Uint8List? value,
+  }) => RemoteAssetMetadataEntityData(
+    assetId: assetId ?? this.assetId,
+    key: key ?? this.key,
+    value: value ?? this.value,
+  );
+  RemoteAssetMetadataEntityData copyWithCompanion(
+    RemoteAssetMetadataEntityCompanion data,
+  ) {
+    return RemoteAssetMetadataEntityData(
+      assetId: data.assetId.present ? data.assetId.value : this.assetId,
+      key: data.key.present ? data.key.value : this.key,
+      value: data.value.present ? data.value.value : this.value,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('RemoteAssetMetadataEntityData(')
+          ..write('assetId: $assetId, ')
+          ..write('key: $key, ')
+          ..write('value: $value')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(assetId, key, $driftBlobEquality.hash(value));
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is RemoteAssetMetadataEntityData &&
+          other.assetId == this.assetId &&
+          other.key == this.key &&
+          $driftBlobEquality.equals(other.value, this.value));
+}
+
+class RemoteAssetMetadataEntityCompanion
+    extends UpdateCompanion<RemoteAssetMetadataEntityData> {
+  final Value<String> assetId;
+  final Value<String> key;
+  final Value<Uint8List> value;
+  const RemoteAssetMetadataEntityCompanion({
+    this.assetId = const Value.absent(),
+    this.key = const Value.absent(),
+    this.value = const Value.absent(),
+  });
+  RemoteAssetMetadataEntityCompanion.insert({
+    required String assetId,
+    required String key,
+    required Uint8List value,
+  }) : assetId = Value(assetId),
+       key = Value(key),
+       value = Value(value);
+  static Insertable<RemoteAssetMetadataEntityData> custom({
+    Expression<String>? assetId,
+    Expression<String>? key,
+    Expression<Uint8List>? value,
+  }) {
+    return RawValuesInsertable({
+      if (assetId != null) 'asset_id': assetId,
+      if (key != null) 'key': key,
+      if (value != null) 'value': value,
+    });
+  }
+
+  RemoteAssetMetadataEntityCompanion copyWith({
+    Value<String>? assetId,
+    Value<String>? key,
+    Value<Uint8List>? value,
+  }) {
+    return RemoteAssetMetadataEntityCompanion(
+      assetId: assetId ?? this.assetId,
+      key: key ?? this.key,
+      value: value ?? this.value,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (assetId.present) {
+      map['asset_id'] = Variable<String>(assetId.value);
+    }
+    if (key.present) {
+      map['key'] = Variable<String>(key.value);
+    }
+    if (value.present) {
+      map['value'] = Variable<Uint8List>(value.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('RemoteAssetMetadataEntityCompanion(')
+          ..write('assetId: $assetId, ')
+          ..write('key: $key, ')
+          ..write('value: $value')
+          ..write(')'))
+        .toString();
+  }
+}
+
 class RemoteExifEntity extends Table
     with TableInfo<RemoteExifEntity, RemoteExifEntityData> {
   @override
@@ -6629,6 +6848,10 @@ class DatabaseAtV9 extends GeneratedDatabase {
     'idx_local_asset_checksum',
     'CREATE INDEX IF NOT EXISTS idx_local_asset_checksum ON local_asset_entity (checksum)',
   );
+  late final Index idxLocalAssetCloudId = Index(
+    'idx_local_asset_cloud_id',
+    'CREATE INDEX IF NOT EXISTS idx_local_asset_cloud_id ON local_asset_entity (cloud_id)',
+  );
   late final Index idxRemoteAssetOwnerChecksum = Index(
     'idx_remote_asset_owner_checksum',
     'CREATE INDEX IF NOT EXISTS idx_remote_asset_owner_checksum ON remote_asset_entity (owner_id, checksum)',
@@ -6647,6 +6870,8 @@ class DatabaseAtV9 extends GeneratedDatabase {
   );
   late final UserMetadataEntity userMetadataEntity = UserMetadataEntity(this);
   late final PartnerEntity partnerEntity = PartnerEntity(this);
+  late final RemoteAssetMetadataEntity remoteAssetMetadataEntity =
+      RemoteAssetMetadataEntity(this);
   late final RemoteExifEntity remoteExifEntity = RemoteExifEntity(this);
   late final RemoteAlbumEntity remoteAlbumEntity = RemoteAlbumEntity(this);
   late final RemoteAlbumAssetEntity remoteAlbumAssetEntity =
@@ -6674,12 +6899,14 @@ class DatabaseAtV9 extends GeneratedDatabase {
     localAlbumEntity,
     localAlbumAssetEntity,
     idxLocalAssetChecksum,
+    idxLocalAssetCloudId,
     idxRemoteAssetOwnerChecksum,
     uQRemoteAssetsOwnerChecksum,
     uQRemoteAssetsOwnerLibraryChecksum,
     idxRemoteAssetChecksum,
     userMetadataEntity,
     partnerEntity,
+    remoteAssetMetadataEntity,
     remoteExifEntity,
     remoteAlbumEntity,
     remoteAlbumAssetEntity,

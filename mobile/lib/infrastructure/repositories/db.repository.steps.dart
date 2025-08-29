@@ -3447,12 +3447,14 @@ final class Schema9 extends i0.VersionedSchema {
     localAlbumEntity,
     localAlbumAssetEntity,
     idxLocalAssetChecksum,
+    idxLocalAssetCloudId,
     idxRemoteAssetOwnerChecksum,
     uQRemoteAssetsOwnerChecksum,
     uQRemoteAssetsOwnerLibraryChecksum,
     idxRemoteAssetChecksum,
     userMetadataEntity,
     partnerEntity,
+    remoteAssetMetadataEntity,
     remoteExifEntity,
     remoteAlbumEntity,
     remoteAlbumAssetEntity,
@@ -3581,6 +3583,10 @@ final class Schema9 extends i0.VersionedSchema {
     'idx_local_asset_checksum',
     'CREATE INDEX IF NOT EXISTS idx_local_asset_checksum ON local_asset_entity (checksum)',
   );
+  final i1.Index idxLocalAssetCloudId = i1.Index(
+    'idx_local_asset_cloud_id',
+    'CREATE INDEX IF NOT EXISTS idx_local_asset_cloud_id ON local_asset_entity (cloud_id)',
+  );
   final i1.Index idxRemoteAssetOwnerChecksum = i1.Index(
     'idx_remote_asset_owner_checksum',
     'CREATE INDEX IF NOT EXISTS idx_remote_asset_owner_checksum ON remote_asset_entity (owner_id, checksum)',
@@ -3615,6 +3621,17 @@ final class Schema9 extends i0.VersionedSchema {
       isStrict: true,
       tableConstraints: ['PRIMARY KEY(shared_by_id, shared_with_id)'],
       columns: [_column_28, _column_29, _column_30],
+      attachedDatabase: database,
+    ),
+    alias: null,
+  );
+  late final Shape20 remoteAssetMetadataEntity = Shape20(
+    source: i0.VersionedTable(
+      entityName: 'remote_asset_metadata_entity',
+      withoutRowId: true,
+      isStrict: true,
+      tableConstraints: ['PRIMARY KEY(asset_id, "key")'],
+      columns: [_column_36, _column_91, _column_27],
       attachedDatabase: database,
     ),
     alias: null,
@@ -3825,6 +3842,24 @@ i1.GeneratedColumn<String> _column_90(String aliasedName) =>
       'cloud_id',
       aliasedName,
       true,
+      type: i1.DriftSqlType.string,
+    );
+
+class Shape20 extends i0.VersionedTable {
+  Shape20({required super.source, required super.alias}) : super.aliased();
+  i1.GeneratedColumn<String> get assetId =>
+      columnsByName['asset_id']! as i1.GeneratedColumn<String>;
+  i1.GeneratedColumn<String> get key =>
+      columnsByName['key']! as i1.GeneratedColumn<String>;
+  i1.GeneratedColumn<i2.Uint8List> get value =>
+      columnsByName['value']! as i1.GeneratedColumn<i2.Uint8List>;
+}
+
+i1.GeneratedColumn<String> _column_91(String aliasedName) =>
+    i1.GeneratedColumn<String>(
+      'key',
+      aliasedName,
+      false,
       type: i1.DriftSqlType.string,
     );
 i0.MigrationStepWithVersion migrationSteps({
